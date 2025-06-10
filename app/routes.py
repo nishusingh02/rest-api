@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
 from .models import App
 from .database import db
+import openai
+import os
 
 app_bp = Blueprint('app_bp', __name__)
 
@@ -38,7 +40,7 @@ def home():
     return jsonify({'message': 'Welcome to the App API!'})
 
 
-# ...existing code...
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Or set directly: openai.api_key = "sk-..."
 
 @app_bp.route('/chat', methods=['POST'])
 def chat():
@@ -47,9 +49,15 @@ def chat():
     if not prompt:
         return jsonify({'error': 'Prompt is required'}), 400
 
-    # For now, just echo the prompt. Replace this with your AI logic.
-    answer = f"You said: {prompt}"
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # or "gpt-4" if you have access
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+        answer = response['choices'][0]['message']['content']
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
     return jsonify({'answer': answer})
-
-# ...existing code...
