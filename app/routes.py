@@ -32,3 +32,24 @@ def delete_app(id):
     db.session.delete(app)
     db.session.commit()
     return jsonify({'message': 'App deleted successfully'})
+
+@app_bp.route('/', methods=['GET'])
+def home():
+    return jsonify({'message': 'Welcome to the App API!'})
+
+
+# ...existing code...
+
+@app_bp.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    prompt = data.get('prompt')
+    if not prompt:
+        return jsonify({'error': 'Prompt is required'}), 400
+
+    # For now, just echo the prompt. Replace this with your AI logic.
+    answer = f"You said: {prompt}"
+
+    return jsonify({'answer': answer})
+
+# ...existing code...
