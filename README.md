@@ -15,7 +15,7 @@ A simple Flask-based API to manage app details using SQLite and interact with Op
 - `DELETE /delete-app/<id>`  
   Delete app by ID.
 
-  - `POST /chat`  
+- `POST /chat`  
   Get a GPT-powered response to a prompt.  
   **Body:**  
   ```json
