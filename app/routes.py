@@ -3,6 +3,9 @@ from .models import App
 from .database import db
 import openai
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app_bp = Blueprint('app_bp', __name__)
 
@@ -40,7 +43,8 @@ def home():
     return jsonify({'message': 'Welcome to the App API!'})
 
 
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Or set directly: openai.api_key = "sk-..."
+# openai.api_key = os.getenv("OPENAI_API_KEY")  # Or set directly: openai.api_key = "sk-..."
+
 
 @app_bp.route('/chat', methods=['POST'])
 def chat():
@@ -50,13 +54,12 @@ def chat():
         return jsonify({'error': 'Prompt is required'}), 400
 
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # or "gpt-4" if you have access
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
+        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}]
         )
-        answer = response['choices'][0]['message']['content']
+        answer = response.choices[0].message.content
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
