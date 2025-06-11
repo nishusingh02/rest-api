@@ -1,6 +1,11 @@
 from flask import Blueprint, request, jsonify
 from .models import App
 from .database import db
+import openai
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app_bp = Blueprint('app_bp', __name__)
 
@@ -32,3 +37,30 @@ def delete_app(id):
     db.session.delete(app)
     db.session.commit()
     return jsonify({'message': 'App deleted successfully'})
+
+@app_bp.route('/', methods=['GET'])
+def home():
+    return jsonify({'message': 'Welcome to the App API!'})
+
+
+# openai.api_key = os.getenv("OPENAI_API_KEY")  # Or set directly: openai.api_key = "sk-..."
+
+
+@app_bp.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    prompt = data.get('prompt')
+    if not prompt:
+        return jsonify({'error': 'Prompt is required'}), 400
+
+    try:
+        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        answer = response.choices[0].message.content
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify({'answer': answer})
