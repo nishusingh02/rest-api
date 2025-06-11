@@ -78,10 +78,10 @@ You will receive a JSON response with the AI's answer.
 ![Add App Output](images/image-1.png)
 
 ### Get App
-![Get App Output](image.png)
+![Get App Output](images/image.png)
 
 ### Delete App
-![Delete App Output](image-2.png)
+![Delete App Output](images/image-2.png)
 
 ### Chat Endpoint
-![Chat Output](image-3.png)
+![Chat Output](images/image-3.png)
