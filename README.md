@@ -75,7 +75,7 @@ You will receive a JSON response with the AI's answer.
 ## Example Outputs
 
 ### Add App
-![Add App Output](image-1.png)
+![Add App Output](images/image-1.png)
 
 ### Get App
 ![Get App Output](image.png)
